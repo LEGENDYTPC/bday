@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Dreamy!</title>
+
+  <!-- Hidden message: Mere sapno ka dhyan rakhna – DreamSayz (Chota Baccha) -->
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to top right, #ffe0f0, #fcd8f0);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative; /* Needed for absolute children */
+    }
+
+    #giftBox {
+      text-align: center;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #ff69b4;
+      border: none;
+      border-radius: 30px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .card {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      max-width: 90%;
+      width: 500px;
+      height: auto;
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out;
+      position: relative;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9);}
+      to { opacity: 1; transform: scale(1);}
+    }
+
+    .card h1 {
+      color: #ff1493;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #444;
+      font-size: 18px;
+      margin: 8px 0;
+    }
+
+    .hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .heart {
+      width: 20px;
+      height: 20px;
+      background: pink;
+      position: absolute;
+      top: 100%;
+      animation: float 5s linear infinite;
+      transform: rotate(45deg);
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: pink;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        top: 100%;
+        opacity: 1;
+        transform: rotate(0) scale(0.5);
+      }
+      100% {
+        top: -10%;
+        opacity: 0;
+        transform: rotate(360deg) scale(1.5);
+      }
+    }
+
+    /* Secret button styling */
+    #secretButton {
+      display: none;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background-color: #ff69b4;
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    /* Invisible trigger area for mobile */
+    #secretTrigger {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      opacity: 0;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div id="giftBox">
+    <button class="btn" onclick="openGift()">🎁 Tap to Open Your Gift</button>
+  </div>
+
+  <div class="card" id="card">
+    <h1>🎉 Happy Birthday, Dreamy! 🎉</h1>
+    <p>Today is all about <strong>YOU</strong>, Dreamy! 🌸</p>
+    <p>May your day be as beautiful, magical, and sweet as your name. 💖</p>
+    <p>Keep dreaming big, smiling bright, and spreading your lovely vibes. ✨</p>
+    <p>Happy Birthday once again! 💕</p>
+    <div class="hearts" id="heartsContainer"></div>
+  </div>
+
+  <!-- Invisible trigger area for mobile long press -->
+  <div id="secretTrigger"></div>
+
+  <!-- Hidden secret button -->
+  <button id="secretButton">💌 Secret Message</button>
+
+  <script>
+    function openGift() {
+      document.getElementById("giftBox").style.display = "none";
+      const card = document.getElementById("card");
+      card.style.display = "flex";
+
+      const heartsContainer = document.getElementById("heartsContainer");
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.animationDuration = 3 + Math.random() * 5 + "s";
+        heartsContainer.appendChild(heart);
+      }
+    }
+
+    // Desktop: Show secret button on Ctrl + D
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && (e.key === 'd' || e.key === 'D')) {
+        document.getElementById('secretButton').style.display = 'block';
+      }
+    });
+
+    // Mobile: Long press on secretTrigger div to show secret button
+    let pressTimer;
+    const trigger = document.getElementById('secretTrigger');
+
+    trigger.addEventListener('touchstart', function () {
+      pressTimer = setTimeout(() => {
+        document.getElementById('secretButton').style.display = 'block';
+      }, 1000); // 1 second long press
+    });
+
+    trigger.addEventListener('touchend', function () {
+      clearTimeout(pressTimer);
+    });
+
+    // Show alert on secret button click
+    document.getElementById('secretButton').addEventListener('click', function () {
+      alert("Bhabhi ji ka dil DreamSayz ke liye dhadakta hai 💖");
+    });
+  </script>
+</body>
+</html>
